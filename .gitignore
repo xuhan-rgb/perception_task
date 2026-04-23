@@ -1,0 +1,38 @@
+# === 上游开源工程（请按 README 自行 clone） ===
+detection/Co-DETR/
+detection/GroundingDINO/
+
+# === 模型权重与检查点（体积大，不进仓库） ===
+checkpoints/
+weights/
+*.pt
+*.pth
+*.ckpt
+
+# === 数据集 / 标注 / 推理产物 ===
+label/
+label_out/
+output/
+vis/
+logs/
+data/
+
+# === 构建产物 ===
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+
+# === 开发辅助（仅本地有效） ===
+.serena/
+.claude/
+CLAUDE.md
+.vscode/
+.idea/
+.DS_Store
+
+# === 其他 ===
+*.log
+*.swp
