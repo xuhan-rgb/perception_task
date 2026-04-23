@@ -1,6 +1,5 @@
 # === 上游开源工程（请按 README 自行 clone） ===
 detection/Co-DETR/
-detection/GroundingDINO/
 
 # === 模型权重与检查点（体积大，不进仓库） ===
 checkpoints/
