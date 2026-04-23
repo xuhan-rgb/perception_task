@@ -9,19 +9,21 @@
 
 set -e
 
-# ========== 参数配置 ==========
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# ========== 参数配置（环境变量可覆盖）==========
 # 检测参数
-CONF_THRES=0.3          # 置信度阈值
-NMS_THRES=0.5           # NMS IoU 阈值
+CONF_THRES="${CONF_THRES:-0.3}"     # 置信度阈值
+NMS_THRES="${NMS_THRES:-0.5}"       # NMS IoU 阈值
 
 # 对比参数
-IOU_THRES=0.5           # 匹配 IoU 阈值
-GT_SCORE_THRES=0.5      # GT 得分阈值 (Co-DETR 检测得分超过此值才视为真实目标)
+IOU_THRES="${IOU_THRES:-0.5}"              # 匹配 IoU 阈值
+GT_SCORE_THRES="${GT_SCORE_THRES:-0.5}"    # GT 得分阈值
 
 # 路径配置
-INPUT_DIR="../chandao_data/results/crops"
-YOLO_MODEL="/mnt/data/ultralytics/runs/detect/train_det/weights/best.pt"
-CODETR_MODEL="swin_o365"
+INPUT_DIR="${INPUT_DIR:-/mnt/data/04-DevTools/chandao_data/results/crops}"
+YOLO_MODEL="${YOLO_MODEL:-/mnt/data/03-ML-Env/ultralytics/runs/ped_detect/train7/weights/best.pt}"
+CODETR_MODEL="${CODETR_MODEL:-swin_o365}"
 
 # ========== 步骤选择 ==========
 STEP="${1:-all}"
@@ -29,30 +31,30 @@ STEP="${1:-all}"
 case "$STEP" in
     "1"|"codetr")
         echo "===== 步骤1: Co-DETR 检测 ====="
-        ./run_codetr_detect.sh $CODETR_MODEL $INPUT_DIR $CONF_THRES $NMS_THRES
+        "$SCRIPT_DIR/run_codetr_detect.sh" $CODETR_MODEL $INPUT_DIR $CONF_THRES $NMS_THRES
         ;;
     
     "2"|"yolo")
         echo "===== 步骤2: YOLO 检测 ====="
-        ./step2_yolo_detect.sh $CONF_THRES $NMS_THRES $INPUT_DIR $YOLO_MODEL
+        "$SCRIPT_DIR/step2_yolo_detect.sh" $CONF_THRES $NMS_THRES $INPUT_DIR $YOLO_MODEL
         ;;
     
     "3"|"compare")
         echo "===== 步骤3: 对比筛选 ====="
-        ./step3_compare.sh $INPUT_DIR $CODETR_MODEL $IOU_THRES $GT_SCORE_THRES
+        "$SCRIPT_DIR/step3_compare.sh" $INPUT_DIR $CODETR_MODEL $IOU_THRES $GT_SCORE_THRES
         ;;
     
     "all")
         echo "===== 运行全部步骤 ====="
         echo ""
         echo "步骤1: Co-DETR 检测"
-        ./run_codetr_detect.sh $CODETR_MODEL $INPUT_DIR $CONF_THRES $NMS_THRES
+        "$SCRIPT_DIR/run_codetr_detect.sh" $CODETR_MODEL $INPUT_DIR $CONF_THRES $NMS_THRES
         echo ""
         echo "步骤2: YOLO 检测"
-        ./step2_yolo_detect.sh $CONF_THRES $NMS_THRES $INPUT_DIR $YOLO_MODEL
+        "$SCRIPT_DIR/step2_yolo_detect.sh" $CONF_THRES $NMS_THRES $INPUT_DIR $YOLO_MODEL
         echo ""
         echo "步骤3: 对比筛选"
-        ./step3_compare.sh $INPUT_DIR $CODETR_MODEL $IOU_THRES $GT_SCORE_THRES
+        "$SCRIPT_DIR/step3_compare.sh" $INPUT_DIR $CODETR_MODEL $IOU_THRES $GT_SCORE_THRES
         ;;
     
     *)

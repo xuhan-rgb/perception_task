@@ -4,8 +4,10 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # 参数配置
-INPUT_DIR="${1:-../chandao_data/results/crops}"
+INPUT_DIR="${1:-/mnt/data/04-DevTools/chandao_data/results/crops}"
 CODETR_MODEL="${2:-swin_o365}"
 IOU_THRES="${3:-0.5}"
 GT_SCORE_THRES="${4:-0.5}"
@@ -35,5 +37,5 @@ if [ ! -d "$CODETR_LABELS" ]; then
     exit 1
 fi
 
-./run_yolo_compare.sh compare "$YOLO_LABELS" "$CODETR_LABELS" "$INPUT_DIR" "$IOU_THRES" "$GT_SCORE_THRES"
+"$SCRIPT_DIR/run_yolo_compare.sh" compare "$YOLO_LABELS" "$CODETR_LABELS" "$INPUT_DIR" "$IOU_THRES" "$GT_SCORE_THRES"
 

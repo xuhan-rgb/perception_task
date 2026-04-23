@@ -17,11 +17,12 @@ CONF_THRES="${3:-0.3}"
 NMS_THRES="${4:-0.5}"
 CLASSES="${5:-}"  # 可选：指定检测类别，如 "person" 或 "0,2,car,bus"
 
-# 路径配置
-CODETR_ROOT="/mnt/data/Co-DETR"
-CKPT_BASE="$CODETR_ROOT/checkpoints/co_dino"
-CONFIG_BASE="$CODETR_ROOT/projects/configs/co_dino"
-SCRIPT="/mnt/data/dev-scripts/tools/dino_detect_eval.py"
+# 路径配置（支持环境变量覆盖）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CODETR_ROOT="${CODETR_ROOT:-$(realpath "$SCRIPT_DIR/../../detection/Co-DETR")}"
+CKPT_BASE="${CKPT_BASE:-$CODETR_ROOT/checkpoints/co_dino}"
+CONFIG_BASE="${CONFIG_BASE:-$CODETR_ROOT/projects/configs/co_dino}"
+SCRIPT="${DINO_DETECT_EVAL:-/mnt/data/04-DevTools/dev-scripts/tools/detection/dino_detect_eval.py}"
 
 # 激活环境
 source ~/anaconda3/bin/activate codetr
